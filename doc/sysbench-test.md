@@ -34,7 +34,7 @@ sysbench oltp_delete --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=root
 
 2.amout of data test
 
-in this scenario, change the `TABLE_SIZE` for 20000000,40000000,60000000,80000000 and 100000000 for every single test
+in this scenario, change the `TABLE_SIZE` to 20000000,40000000,60000000,80000000 and 100000000 for every single test
 
 ```
 # init the database
@@ -60,7 +60,7 @@ sysbench oltp_read_write --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=
 
 3.concurrency test
 
-in this scenario, change the `THREADS` for 1,20,100,200,500 and 1000 for every single test.Init data one time is enough.
+in this scenario, change the `THREADS` to 1,20,100,200,500 and 1000 for every single test.Init data one time is enough.
 
 ```
 # init the database
@@ -112,7 +112,7 @@ sysbench oltp_read_write --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=
 
 5. merge sorting test
 
-first of all, change the script of sysbench oltp_read_only to `SELECT c FROM sbtest1 WHERE ? > 0 AND id BETWEEN 1 AND 100` and then test by following script
+first of all, change the lua script of sysbench oltp_read_only to `SELECT c FROM sbtest1 WHERE ? > 0 AND id BETWEEN 1 AND 100` and then test by following script
 
 ```
 # init the database
