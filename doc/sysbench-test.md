@@ -2,7 +2,7 @@
 
 followings are the sysbench related test script
 
-1.scenario test
+## 1.scenario test
 
 ```
 # init the database
@@ -32,7 +32,7 @@ sysbench oltp_update_non_index --mysql-host=${HOST} --mysql-port=${PORT} --mysql
 sysbench oltp_delete --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=root --mysql-password=${PASSWORD} --mysql-db=${DATABASE} --tables=${TABLES} --table-size=${TABLE_SIZE} --report-interval=5 --time=${TIME} --threads=${THREADS} --max-requests=0 --percentile=99 --mysql-ignore-errors="all" --range_selects=off --rand-type=uniform --auto_inc=off run | tee oltp_delete.${DB_TYPE}.txt
 ```
 
-2.amout of data test
+## 2.amout of data test
 
 in this scenario, change the `TABLE_SIZE` to 20000000,40000000,60000000,80000000 and 100000000 for every single test
 
@@ -58,7 +58,7 @@ sysbench oltp_read_only --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=r
 sysbench oltp_read_write --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=root --mysql-password=${PASSWORD} --mysql-db=${DATABASE} --tables=${TABLES} --table-size=${TABLE_SIZE} --report-interval=5 --time=${TIME} --threads=${THREADS} --max-requests=0 --percentile=99 --mysql-ignore-errors="all" --range_selects=off --rand-type=uniform --auto_inc=off run | tee oltp_read_write.${DB_TYPE}.txt
 ``` 
 
-3.concurrency test
+## 3.concurrency test
 
 in this scenario, change the `THREADS` to 1,20,100,200,500 and 1000 for every single test.Init data one time is enough.
 
@@ -84,7 +84,7 @@ sysbench oltp_read_only --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=r
 sysbench oltp_read_write --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=root --mysql-password=${PASSWORD} --mysql-db=${DATABASE} --tables=${TABLES} --table-size=${TABLE_SIZE} --report-interval=5 --time=${TIME} --threads=${THREADS} --max-requests=0 --percentile=99 --mysql-ignore-errors="all" --range_selects=off --rand-type=uniform --auto_inc=off run | tee oltp_read_write.${DB_TYPE}.txt
 ``` 
 
-4.data node test
+## 4.data node test
 
 in this scenario, change the sharding data node of testing target to 1,3,5,7,9 and 11 for every single test. 
 
@@ -110,7 +110,7 @@ sysbench oltp_read_only --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=r
 sysbench oltp_read_write --mysql-host=${HOST} --mysql-port=${PORT} --mysql-user=root --mysql-password=${PASSWORD} --mysql-db=${DATABASE} --tables=${TABLES} --table-size=${TABLE_SIZE} --report-interval=5 --time=${TIME} --threads=${THREADS} --max-requests=0 --percentile=99 --mysql-ignore-errors="all" --range_selects=off --rand-type=uniform --auto_inc=off run | tee oltp_read_write.${DB_TYPE}.txt
 ``` 
 
-5. merge sorting test
+## 5.merge sorting test
 
 first of all, change the lua script of sysbench oltp_read_only to `SELECT c FROM sbtest1 WHERE ? > 0 AND id BETWEEN 1 AND 100` and then test by following script
 
