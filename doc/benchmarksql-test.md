@@ -92,7 +92,7 @@ first, create a test config file `prop.jdbc-mysql` for MySQL like followings
 # use pg type to skip benchmarksql database type check
 db=postgres
 driver=com.mysql.jdbc.Driver
-conn=jdbc:mysql://10.0.0.1:3307/tpcc_ssj
+conn=jdbc:mysql://10.0.0.100:3307/tpcc_ssj
 user=root
 password=YOUR_PASSWORD
 ssJdbcYamlLocation=/opt/tpcc/test-lab/run/config-sharding-mysql.yaml
@@ -320,7 +320,7 @@ first, create a test config file `prop.jdbc-pgsql` for PostgreSQL like following
 # use pg type to skip benchmarksql database type check
 db=postgres
 driver=org.postgresql.Driver
-conn=jdbc:postgresql://10.16.9.12:3307/tpcc_ssj
+conn=jdbc:postgresql://10.0.0.100:3307/tpcc_ssj
 user=root
 password=YOUR_PASSWORD
 ssJdbcYamlLocation=/opt/tpcc/test-lab/run/config-sharding-pgsql.yaml
