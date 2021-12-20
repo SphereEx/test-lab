@@ -22,3 +22,5 @@ followings are the report for the benchmarksql
 
 [BenchmarkSQL report](report)
 
+[TiDB TPCC report](doc/tpcc-report/tidb/report.html)
+[TiDB TPCC Graph](doc/tpcc-report/tidb/Rplots.pdf)
