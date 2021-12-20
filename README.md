@@ -13,6 +13,8 @@ followings are the documents for the script and configuration of these tools
 
 TODO
 
+### TiDB Installation
+[TiDB Install Config](doc/tidb-install.md)
 
 ## Stress Testing Report
 
@@ -20,3 +22,5 @@ followings are the report for the benchmarksql
 
 [BenchmarkSQL report](report)
 
+[TiDB TPCC report](doc/tpcc-report/tidb/report.html)
+[TiDB TPCC Graph](doc/tpcc-report/tidb/Rplots.pdf)
