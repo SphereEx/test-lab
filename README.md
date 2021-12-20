@@ -13,6 +13,8 @@ followings are the documents for the script and configuration of these tools
 
 TODO
 
+### TiDB Installation
+[TiDB Install Config](doc/tidb-install.md)
 
 ## Stress Testing Report
 

@@ -7,20 +7,20 @@ global:
   data_dir: "/extra/tidb-data-cluster"
 server_configs: {}
 pd_servers:
-  - host: 10.16.9.224
-  - host: 10.16.9.183
-  - host: 10.16.9.241
+  - host: 10.0.0.224
+  - host: 10.0.0.183
+  - host: 10.0.0.241
 tidb_servers:
-  - host: 10.16.9.168
+  - host: 10.0.0.168
 tikv_servers:
-  - host: 10.16.9.188
-  - host: 10.16.9.241
-  - host: 10.16.9.183
-  - host: 10.16.9.224
-  - host: 10.16.9.200
+  - host: 10.0.0.188
+  - host: 10.0.0.241
+  - host: 10.0.0.183
+  - host: 10.0.0.224
+  - host: 10.0.0.200
 
 monitoring_servers:
-  - host: 10.16.9.224
+  - host: 10.0.0.224
 grafana_servers:
-  - host: 10.16.9.224
+  - host: 10.0.0.224
 ```
