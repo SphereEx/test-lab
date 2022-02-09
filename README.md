@@ -9,9 +9,6 @@ followings are the documents for the script and configuration of these tools
 
 [BenchmarkSQL configuration](doc/benchmarksql-test.md)
 
-## Database Installation
-
-TODO
 
 ### TiDB Installation
 [TiDB Install Config](doc/tidb-install.md)
@@ -21,10 +18,3 @@ TODO
 followings are the report for the benchmarksql
 
 [BenchmarkSQL report](report)
-
-[TiDB TPCC report](doc/tpcc-report/tidb/report.html)
-[TiDB TPCC Graph](doc/tpcc-report/tidb/Rplots.pdf)
-
-[CITUS TPCC report](report/my_result_2021-12-12_224011_citus)
-
-[VITESS TPCC report](report/my_result_2021-12-11_121930_vitess)
