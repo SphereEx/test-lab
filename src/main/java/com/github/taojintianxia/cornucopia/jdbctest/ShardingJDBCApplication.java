@@ -72,4 +72,17 @@ public class ShardingJDBCApplication {
         }
         return timeTotal * 1.0 / concurrentLinkedQueue.size();
     }
+    
+    private static double getPercentileTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue, Integer percentile) {
+        if (percentile == null) {
+            percentile = 90;
+        }
+        int percentilePosition = concurrentLinkedQueue.size() * percentile / 100;
+        if (percentilePosition >= concurrentLinkedQueue.size()) {
+            percentilePosition = concurrentLinkedQueue.size() - 1;
+        }
+        Long[] longArray = new Long[concurrentLinkedQueue.size()];
+        concurrentLinkedQueue.toArray(longArray);
+        return longArray[percentilePosition];
+    }
 }
