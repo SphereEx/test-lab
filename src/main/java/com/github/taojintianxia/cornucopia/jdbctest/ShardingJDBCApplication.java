@@ -65,6 +65,7 @@ public class ShardingJDBCApplication {
         System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
         System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
         System.out.println("TPS is : " + concurrentLinkedQueue.size() / SysbenchConstant.time);
+        System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
     }
 
     private static double getAverageTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue) {
@@ -95,11 +96,8 @@ public class ShardingJDBCApplication {
         return minTime;
     }
     
-    private static double getPercentileTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue, Integer percentile) {
-        if (percentile == null) {
-            percentile = 90;
-        }
-        int percentilePosition = concurrentLinkedQueue.size() * percentile / 100;
+    private static double getPercentileTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue) {
+        int percentilePosition = concurrentLinkedQueue.size() * SysbenchConstant.percentile / 100;
         if (percentilePosition >= concurrentLinkedQueue.size()) {
             percentilePosition = concurrentLinkedQueue.size() - 1;
         }
