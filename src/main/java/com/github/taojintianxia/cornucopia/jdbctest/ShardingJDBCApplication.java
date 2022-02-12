@@ -62,6 +62,8 @@ public class ShardingJDBCApplication {
     private static void analyze() {
         System.out.println("Total execution count : " + concurrentLinkedQueue.size());
         System.out.println("Average time is : " + BigDecimal.valueOf(getAverageTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
         System.out.println("TPS is : " + concurrentLinkedQueue.size() / SysbenchConstant.time);
     }
 
@@ -71,6 +73,26 @@ public class ShardingJDBCApplication {
             timeTotal += each;
         }
         return timeTotal * 1.0 / concurrentLinkedQueue.size();
+    }
+    
+    private static double getMaxime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue) {
+        double maxTime = 0;
+        for (long each : concurrentLinkedQueue) {
+            if (each > maxTime) {
+                maxTime = each;
+            }
+        }
+        return maxTime;
+    }
+    
+    private static double getMinTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue) {
+        double minTime = Integer.MAX_VALUE;
+        for (long each : concurrentLinkedQueue) {
+            if (each < minTime) {
+                minTime = each;
+            }
+        }
+        return minTime;
     }
     
     private static double getPercentileTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue, Integer percentile) {
