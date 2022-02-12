@@ -11,6 +11,8 @@ public class SysbenchConstant {
     public static String scriptName;
 
     public static int tableSize;
+    
+    public static int percentile;
 
     public static String distributionTransaction;
     
@@ -21,5 +23,10 @@ public class SysbenchConstant {
         scriptName = System.getProperty("script");
         tableSize = Integer.parseInt(System.getProperty("table-size"));
         distributionTransaction = System.getProperty("transaction-mode");
+        if (null == System.getProperty("percentile") || "".equals(System.getProperty("percentile"))){
+            percentile = 99;
+        } else {
+            percentile = Integer.parseInt(System.getProperty("percentile"));
+        }
     }
 }
