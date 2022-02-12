@@ -24,7 +24,7 @@ public class ShardingJDBCApplication {
 
     private static final ConcurrentLinkedQueue<Long> concurrentLinkedQueue = new ConcurrentLinkedQueue<>();
     
-    final String prefix = "ShardingSphere-JDBC-";
+    private static final String prefix = "ShardingSphere-JDBC-";
     
     public static void main( String... args ) throws SQLException, IOException {
         SysbenchParamValidator.validateSysbenchParam();
@@ -65,11 +65,11 @@ public class ShardingJDBCApplication {
 
     private static void analyze() {
         System.out.println("Total execution count : " + concurrentLinkedQueue.size());
-        System.out.println("Average time is : " + BigDecimal.valueOf(getAverageTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
-        System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
-        System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Average time is : " + BigDecimal.valueOf(getAverageTime()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(2, RoundingMode.HALF_UP).doubleValue());
         System.out.println("TPS is : " + concurrentLinkedQueue.size() / SysbenchConstant.time);
-        System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime()).setScale(2, RoundingMode.HALF_UP).doubleValue());
         try {
             fileOutput();
         } catch (Exception e){
@@ -78,17 +78,17 @@ public class ShardingJDBCApplication {
         }
     }
 
-    private static double getAverageTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue) {
+    private static double getAverageTime() {
         long timeTotal = 0;
-        for (long each : concurrentLinkedQueue) {
+        for (long each : ShardingJDBCApplication.concurrentLinkedQueue) {
             timeTotal += each;
         }
-        return timeTotal * 1.0 / concurrentLinkedQueue.size();
+        return timeTotal * 1.0 / ShardingJDBCApplication.concurrentLinkedQueue.size();
     }
     
-    private static double getMaxime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue) {
+    private static double getMaxime() {
         double maxTime = 0;
-        for (long each : concurrentLinkedQueue) {
+        for (long each : ShardingJDBCApplication.concurrentLinkedQueue) {
             if (each > maxTime) {
                 maxTime = each;
             }
@@ -96,9 +96,9 @@ public class ShardingJDBCApplication {
         return maxTime;
     }
     
-    private static double getMinTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue) {
+    private static double getMinTime() {
         double minTime = Integer.MAX_VALUE;
-        for (long each : concurrentLinkedQueue) {
+        for (long each : ShardingJDBCApplication.concurrentLinkedQueue) {
             if (each < minTime) {
                 minTime = each;
             }
@@ -106,24 +106,24 @@ public class ShardingJDBCApplication {
         return minTime;
     }
     
-    private static double getPercentileTime(ConcurrentLinkedQueue<Long> concurrentLinkedQueue) {
-        int percentilePosition = concurrentLinkedQueue.size() * SysbenchConstant.percentile / 100;
-        if (percentilePosition >= concurrentLinkedQueue.size()) {
-            percentilePosition = concurrentLinkedQueue.size() - 1;
+    private static double getPercentileTime() {
+        int percentilePosition = ShardingJDBCApplication.concurrentLinkedQueue.size() * SysbenchConstant.percentile / 100;
+        if (percentilePosition >= ShardingJDBCApplication.concurrentLinkedQueue.size()) {
+            percentilePosition = ShardingJDBCApplication.concurrentLinkedQueue.size() - 1;
         }
-        Long[] longArray = new Long[concurrentLinkedQueue.size()];
-        concurrentLinkedQueue.toArray(longArray);
+        Long[] longArray = new Long[ShardingJDBCApplication.concurrentLinkedQueue.size()];
+        ShardingJDBCApplication.concurrentLinkedQueue.toArray(longArray);
         return longArray[percentilePosition];
     }
     
     private static void fileOutput() throws IOException {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(prefix+System.currentTimeMillis()+".log"));
         bufferedWriter.write("Total execution count : " + concurrentLinkedQueue.size()+"\n");
-        bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAverageTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Min time is :"  + BigDecimal.valueOf(getMinTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAverageTime()).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Min time is :"  + BigDecimal.valueOf(getMinTime()).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
         bufferedWriter.write("TPS is : " + concurrentLinkedQueue.size() / SysbenchConstant.time+"\n");
-        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(concurrentLinkedQueue)).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime()).setScale(2, RoundingMode.HALF_UP).doubleValue()+"\n");
     }
 }
