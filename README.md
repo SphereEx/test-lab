@@ -18,3 +18,6 @@ followings are the documents for the script and configuration of these tools
 followings are the report for the benchmarksql
 
 [BenchmarkSQL report](report)
+
+## Usage of test suit tool
+[Test Suit Usage](doc/how-to-use-jdbc-suit.md)
