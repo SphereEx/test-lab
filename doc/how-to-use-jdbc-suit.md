@@ -24,5 +24,5 @@ mvn clean install
 3. launch the test suit like following :
 
 ```shell
-java -Dconf=/opt/test/sharding-databases-tables.yaml -Dtime=10 -Dthread=2 -Dscript=oltp_read_write -Dtable-size=1000 -Dtables=10 -Dpercentile=90 -jar jdbc-pressure-test-1.0.0-SNAPSHOT.jar 
+java -Dconf=/opt/test/sharding-databases-tables.yaml -Dtime=10 -Dthread=2 -Dscript=oltp_read_write -Dtable-size=1000 -Dtables=10 -Dpercentile=99 -jar jdbc-pressure-test-1.0.0-SNAPSHOT.jar 
 ```
