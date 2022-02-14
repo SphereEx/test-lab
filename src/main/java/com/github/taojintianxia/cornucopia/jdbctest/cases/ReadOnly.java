@@ -11,20 +11,24 @@ public class ReadOnly implements SysbenchBenchmark {
 
     private final Connection connection;
 
-    private final PreparedStatement pointSelectStatement;
+    private final PreparedStatement[] readOnlyStatements;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     public ReadOnly(Connection connection ) throws SQLException {
         this.connection = connection;
-        pointSelectStatement = connection.prepareStatement("SELECT c FROM sbtest1 WHERE id = ?");
+        readOnlyStatements = new PreparedStatement[SysbenchConstant.tables];
+        for (int i = 0; i < SysbenchConstant.tables; i++) {
+            readOnlyStatements[i] = connection.prepareStatement("SELECT c FROM sbtest" +(i+1)+" WHERE id = ?");
+        }
     }
 
     @Override
     public void execute() throws SQLException {
+        int i = random.nextInt(SysbenchConstant.tables);
         connection.setAutoCommit(false);
-        pointSelectStatement.setInt(1, random.nextInt(SysbenchConstant.tableSize));
-        pointSelectStatement.execute();
+        readOnlyStatements[i].setInt(1, random.nextInt(SysbenchConstant.tableSize));
+        readOnlyStatements[i].execute();
         connection.commit();
     }
 }
