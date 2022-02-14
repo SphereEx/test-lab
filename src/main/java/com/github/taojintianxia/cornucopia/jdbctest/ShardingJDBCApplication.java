@@ -125,5 +125,7 @@ public class ShardingJDBCApplication {
         bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
         bufferedWriter.write("TPS is : " + responseTimeLinkedQueue.size() / SysbenchConstant.time+"\n");
         bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.flush();
+        bufferedWriter.close();
     }
 }
