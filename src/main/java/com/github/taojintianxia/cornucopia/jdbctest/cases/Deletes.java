@@ -8,21 +8,22 @@ import java.sql.SQLException;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Deletes implements SysbenchBenchmark {
-
-    private final Connection connection;
-
-    private final PreparedStatement pointSelectStatement;
+    
+    private final PreparedStatement[] deleteStatements;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     public Deletes(Connection connection ) throws SQLException {
-        this.connection = connection;
-        pointSelectStatement = connection.prepareStatement("DELETE FROM sbtest1 WHERE id=?");
+        deleteStatements = new PreparedStatement[SysbenchConstant.tables];
+        for (int i = 0; i < SysbenchConstant.tables; i++) {
+            deleteStatements[i] = connection.prepareStatement("DELETE FROM sbtest" +(i+1)+" WHERE id = ?");
+        }
     }
 
     @Override
     public void execute() throws SQLException {
-        pointSelectStatement.setInt(1, random.nextInt(SysbenchConstant.tableSize));
-        pointSelectStatement.execute();
+        int i = random.nextInt(SysbenchConstant.tables);
+        deleteStatements[i].setInt(1, random.nextInt(SysbenchConstant.tableSize));
+        deleteStatements[i].execute();
     }
 }

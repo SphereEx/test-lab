@@ -11,19 +11,23 @@ public class NonIndexUpdates implements SysbenchBenchmark {
 
     private final Connection connection;
 
-    private final PreparedStatement pointSelectStatement;
+    private final PreparedStatement[] nonIndexUpdatesStatements;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     public NonIndexUpdates(Connection connection ) throws SQLException {
         this.connection = connection;
-        pointSelectStatement = connection.prepareStatement("UPDATE sbtest1 SET c=? WHERE id=?");
+        nonIndexUpdatesStatements = new PreparedStatement[SysbenchConstant.tables];
+        for (int i = 0; i < SysbenchConstant.tables; i++) {
+            nonIndexUpdatesStatements[i] = connection.prepareStatement("UPDATE sbtest" +(i+1)+" SET c=? WHERE id=?");
+        }
     }
 
     @Override
     public void execute() throws SQLException {
-        pointSelectStatement.setString(1, random.nextInt(SysbenchConstant.tableSize)+"");
-        pointSelectStatement.setInt(2, random.nextInt(SysbenchConstant.tableSize));
-        pointSelectStatement.execute();
+        int i = random.nextInt(SysbenchConstant.tables);
+        nonIndexUpdatesStatements[i].setString(1, random.nextInt(SysbenchConstant.tableSize)+"");
+        nonIndexUpdatesStatements[i].setInt(2, random.nextInt(SysbenchConstant.tableSize));
+        nonIndexUpdatesStatements[i].execute();
     }
 }

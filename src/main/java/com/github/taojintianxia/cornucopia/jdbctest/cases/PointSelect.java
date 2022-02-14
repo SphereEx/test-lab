@@ -8,21 +8,22 @@ import java.sql.SQLException;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PointSelect implements SysbenchBenchmark {
-
-    private final Connection connection;
-
-    private final PreparedStatement pointSelectStatement;
+    
+    private final PreparedStatement[] pointSelectStatements;
 
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
 
     public PointSelect( Connection connection ) throws SQLException {
-        this.connection = connection;
-        pointSelectStatement = connection.prepareStatement("SELECT c FROM sbtest1 WHERE id = ?");
+        pointSelectStatements = new PreparedStatement[SysbenchConstant.tables];
+        for (int i = 0; i < SysbenchConstant.tables; i++) {
+            pointSelectStatements[i] = connection.prepareStatement("SELECT c FROM sbtest" +(i+1)+" WHERE id = ?");
+        }
     }
 
     @Override
     public void execute() throws SQLException {
-        pointSelectStatement.setInt(1, random.nextInt(SysbenchConstant.tableSize));
-        pointSelectStatement.execute();
+        int i = random.nextInt(SysbenchConstant.tables);
+        pointSelectStatements[i].setInt(1, random.nextInt(SysbenchConstant.tableSize));
+        pointSelectStatements[i].execute();
     }
 }
