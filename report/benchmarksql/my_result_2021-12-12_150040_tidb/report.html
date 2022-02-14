@@ -1,0 +1,263 @@
+<html>
+<head>
+  <title>
+    BenchmarkSQL Run #22 started 2021-12-10 20:53:31.081
+  </title>
+  <style>
+
+h1,h2,h3,h4	{ color:#2222AA;
+		}
+
+h1		{ font-family: Helvetica,Arial;
+		  font-weight: 700;
+		  font-size: 24pt;
+		}
+
+h2		{ font-family: Helvetica,Arial;
+		  font-weight: 700;
+		  font-size: 18pt;
+		}
+
+h3,h4		{ font-family: Helvetica,Arial;
+		  font-weight: 700;
+		  font-size: 16pt;
+		}
+
+p,li,dt,dd	{ font-family: Helvetica,Arial;
+		  font-size: 14pt;
+		}
+
+p		{ margin-left: 50px;
+		}
+
+pre		{ font-family: Courier,Fixed;
+		  font-size: 14pt;
+		}
+
+samp		{ font-family: Courier,Fixed;
+		  font-weight: 900;
+		  font-size: 14pt;
+		}
+
+big		{ font-weight: 900;
+		  font-size: 120%;
+		}
+
+  </style>
+</head>
+<body bgcolor="#ffffff">
+  <h1>
+    BenchmarkSQL Run #22 started 2021-12-10 20:53:31.081
+  </h1>
+
+  <p>
+    This TPC-C style benchmark run was performed by the "simple"
+    driver of BenchmarkSQL version 5.0. 
+  </p>
+  <h2>
+    Run Properties
+  </h2>
+  <p>
+    <table width="1100px" border="0">
+    <tr><td bgcolor="#f0f0f0">
+    <pre><small>
+db=postgres
+driver=com.mysql.cj.jdbc.Driver
+conn=jdbc:mysql://node05:4000/tpcc?useSSL=false&useServerPrepStmts=true&useConfigs=maxPerformance&rewriteBatchedStatements=true
+user=root
+password=******
+
+warehouses=200
+loadWorkers=10
+
+terminals=200
+//To run specified transactions per terminal- runMins must equal zero
+runTxnsPerTerminal=0
+//To run for specified minutes- runTxnsPerTerminal must equal zero
+runMins=10
+//Number of total transactions per minute
+limitTxnsPerMin=0
+
+//Set to true to run in 4.x compatible mode. Set to false to use the
+//entire configured database evenly.
+terminalWarehouseFixed=true
+
+//The following five values must add up to 100
+//The default percentages of 45, 43, 4, 4 & 4 match the TPC-C spec
+newOrderWeight=45
+paymentWeight=43
+orderStatusWeight=4
+deliveryWeight=4
+stockLevelWeight=4
+
+// Directory name to create for collecting detailed result data.
+// Comment this out to suppress.
+resultDirectory=my_result_%tY-%tm-%td_%tH%tM%tS
+//osCollectorScript=./misc/os_collector_linux.py
+//osCollectorInterval=1
+//osCollectorSSHAddr=user@dbhost
+//osCollectorDevices=net_eth0 blk_sda
+    </small></pre>
+    </td></tr>
+    </table>
+  </p>
+
+  <h2>
+    Result Summary
+  </h2>
+    <p>
+      Note that the "simple" driver is not a true TPC-C implementation.
+      This driver only measures the database response time, not the
+      response time of a System under Test as it would be experienced
+      by an end-user in a 3-tier test implementation.
+    </p>
+  <p>
+    <table width="1100px" border="2">
+    <tr>
+      <th rowspan="2" width="16%"><b>Transaction<br/>Type</b></th>
+      <th colspan="2" width="24%"><b>Latency</b></th>
+      <th rowspan="2" width="12%"><b>Count</b></th>
+      <th rowspan="2" width="12%"><b>Percent</b></th>
+      <th rowspan="2" width="12%"><b>Rollback</b></th>
+      <th rowspan="2" width="12%"><b>Errors</b></th>
+      <th rowspan="2" width="12%"><b>Skipped<br/>Deliveries</b></th>
+    </tr>
+    <tr>
+      <th width="12%"><b>90th&nbsp;%</b></th>
+      <th width="12%"><b>Maximum</b></th>
+    </tr>
+    <tr>
+      <td align="left">NEW_ORDER</td>
+      <td align="right">0.419s</td>
+      <td align="right">0.982s</td>
+      <td align="right">152309</td>
+      <td align="right">44.990%</td>
+      <td align="right">1.000%</td>
+      <td align="right">0</td>
+      <td align="right">N/A</td>
+    </tr>
+    <tr>
+      <td align="left">PAYMENT</td>
+      <td align="right">0.120s</td>
+      <td align="right">0.818s</td>
+      <td align="right">145357</td>
+      <td align="right">42.936%</td>
+      <td align="right">N/A</td>
+      <td align="right">0</td>
+      <td align="right">N/A</td>
+    </tr>
+    <tr>
+      <td align="left">ORDER_STATUS</td>
+      <td align="right">0.087s</td>
+      <td align="right">0.164s</td>
+      <td align="right">13633</td>
+      <td align="right">4.027%</td>
+      <td align="right">N/A</td>
+      <td align="right">0</td>
+      <td align="right">N/A</td>
+    </tr>
+    <tr>
+      <td align="left">STOCK_LEVEL</td>
+      <td align="right">0.125s</td>
+      <td align="right">0.212s</td>
+      <td align="right">13590</td>
+      <td align="right">4.014%</td>
+      <td align="right">N/A</td>
+      <td align="right">0</td>
+      <td align="right">N/A</td>
+    </tr>
+    <tr>
+      <td align="left">DELIVERY</td>
+      <td align="right">0.000s</td>
+      <td align="right">0.001s</td>
+      <td align="right">13652</td>
+      <td align="right">4.033%</td>
+      <td align="right">N/A</td>
+      <td align="right">0</td>
+      <td align="right">N/A</td>
+    </tr>
+    <tr>
+      <td align="left">DELIVERY_BG</td>
+      <td align="right">1.161s</td>
+      <td align="right">50.023s</td>
+      <td align="right">13549</td>
+      <td align="right">N/A</td>
+      <td align="right">N/A</td>
+      <td align="right">0</td>
+      <td align="right">10</td>
+    </tr>
+    </table>
+  </p>
+
+  <p>
+    <table border="0">
+      <tr>
+        <td align="left"><big><b>Overall tpmC:</b></big></td>
+        <td align="right"><big><b>15230.90</b></big></td>
+      </tr>
+      <tr>
+        <td align="left"><big><b>Overall tpmTotal:</b></big></td>
+        <td align="right"><big><b>33854.20</b></big></td>
+      </tr>
+    </table>
+  </p>
+  <p>
+    The TPC-C specification has an theoretical maximum of 12.86 NEW_ORDER
+    transactions per minute per warehouse. In reality this value cannot
+    be reached because it would require a perfect mix with 45% of NEW_ORDER
+    transactions and a ZERO response time from the System under Test
+    including the database. 
+  </p>
+  <p>
+    The above tpmC of 15230.90 is 592.181% of that theoretical maximum for a
+    database with 200 warehouses.
+  </p>
+
+  <h2>
+    Transactions per Minute and Transaction Latency
+  </h2>
+  <p>
+    tpmC is the number of NEW_ORDER Transactions, that where processed
+    per minute. tpmTOTAL is the number of Transactions processed per
+    minute for all transaction types, but without the background part
+    of the DELIVERY transaction. 
+
+    <br/>
+    <img src="tpm_nopm.png"/>
+    <br/>
+    <img src="latency.png"/>
+  </p>
+  <h2>
+    System Resource Usage
+  </h2>
+  <h3>
+    CPU Utilization
+  </h3>
+  <p>
+    The percentages for User, System and IOWait CPU time are stacked
+    on top of each other. 
+
+    <br/>
+    <img src="cpu_utilization.png"/>
+  </p>
+
+  <h3>
+    Dirty Kernel Buffers
+  </h3>
+  <p>
+    We track the number of dirty kernel buffers, as measured by
+    the "nr_dirty" line in /proc/vmstat, to be able to correlate
+    IO problems with when the kernel's IO schedulers are flushing
+    writes to disk. A write(2) system call does not immediately
+    cause real IO on a storage device. The data written is just
+    copied into a kernel buffer. Several tuning parameters control
+    when the OS is actually transferring these dirty buffers to
+    the IO controller(s) in order to eventually get written to
+    real disks (or similar). 
+
+    <br/>
+    <img src="dirty_buffers.png"/>
+  </p>
+</body>
+</html>
+
