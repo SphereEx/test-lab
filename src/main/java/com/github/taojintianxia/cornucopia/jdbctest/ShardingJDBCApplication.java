@@ -29,6 +29,8 @@ public class ShardingJDBCApplication {
     
     private static final String prefix = "ShardingSphere-JDBC-";
     
+    private static final long MILLION = 1000 * 1000;
+    
     public static void main( String... args ) throws SQLException, IOException {
         SysbenchParamValidator.validateSysbenchParam();
         SysbenchConstant.initConstants();
@@ -72,11 +74,11 @@ public class ShardingJDBCApplication {
         List<Long> responseTimeList = new ArrayList<>(responseTimeLinkedQueue.size());
         responseTimeList.addAll(responseTimeLinkedQueue);
         Collections.sort(responseTimeList);
-        System.out.println("Average time is : " + BigDecimal.valueOf(getAverageTime()).setScale(4, RoundingMode.HALF_UP).doubleValue());
-        System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime()).setScale(4, RoundingMode.HALF_UP).doubleValue());
-        System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(4, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Average time is : " + BigDecimal.valueOf(getAverageTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("TPS is : " + responseTimeLinkedQueue.size() / SysbenchConstant.time);
-        System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList)).setScale(4, RoundingMode.HALF_UP).doubleValue());
+        System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         try {
             fileOutput(responseTimeList);
         } catch (Exception e){
