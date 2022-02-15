@@ -15,13 +15,13 @@ public class BenchmarkExecutor implements Runnable {
     @Override
     public void run() {
         while (!Thread.interrupted()) {
-            long start = System.currentTimeMillis();
+            long start = System.nanoTime();
             try {
                 sysbenchBenchmark.execute();
             }catch (Exception e){
                 e.printStackTrace();
             }
-            queue.add(System.currentTimeMillis() - start);
+            queue.add(System.nanoTime() - start);
         }
     }
 }
