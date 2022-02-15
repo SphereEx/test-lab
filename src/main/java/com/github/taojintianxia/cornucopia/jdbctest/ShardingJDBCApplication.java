@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -31,6 +34,7 @@ public class ShardingJDBCApplication {
         SysbenchConstant.initConstants();
         DataSource dataSource = YamlShardingSphereDataSourceFactory.createDataSource(new File(SysbenchConstant.configFilePath));
         ExecutorService service = Executors.newFixedThreadPool(SysbenchConstant.thread);
+        responseTimeLinkedQueue.clear();
         for (int i = 0; i < SysbenchConstant.thread; i++) {
             BenchmarkExecutor benchmarkExecutor = new BenchmarkExecutor(BenchmarkFactory.getBenchmarkByName(SysbenchConstant.scriptName, dataSource.getConnection()), responseTimeLinkedQueue);
             service.submit(benchmarkExecutor);
@@ -65,11 +69,14 @@ public class ShardingJDBCApplication {
 
     private static void analyze() {
         System.out.println("Total execution count : " + responseTimeLinkedQueue.size());
+        List<Long> responseTimeList = new ArrayList<>(responseTimeLinkedQueue.size());
+        responseTimeList.addAll(responseTimeLinkedQueue);
+        Collections.sort(responseTimeList);
         System.out.println("Average time is : " + BigDecimal.valueOf(getAverageTime()).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime()).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("TPS is : " + responseTimeLinkedQueue.size() / SysbenchConstant.time);
-        System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime()).setScale(4, RoundingMode.HALF_UP).doubleValue());
+        System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList)).setScale(4, RoundingMode.HALF_UP).doubleValue());
         try {
             fileOutput();
         } catch (Exception e){
@@ -106,14 +113,12 @@ public class ShardingJDBCApplication {
         return minTime;
     }
     
-    private static double getPercentileTime() {
-        int percentilePosition = ShardingJDBCApplication.responseTimeLinkedQueue.size() * SysbenchConstant.percentile / 100;
-        if (percentilePosition >= ShardingJDBCApplication.responseTimeLinkedQueue.size()) {
-            percentilePosition = ShardingJDBCApplication.responseTimeLinkedQueue.size() - 1;
+    private static double getPercentileTime(List<Long> responseTimeList) {
+        int percentilePosition = responseTimeList.size() * SysbenchConstant.percentile / 100;
+        if (percentilePosition >= responseTimeList.size()) {
+            percentilePosition = responseTimeList.size() - 1;
         }
-        Long[] longArray = new Long[ShardingJDBCApplication.responseTimeLinkedQueue.size()];
-        ShardingJDBCApplication.responseTimeLinkedQueue.toArray(longArray);
-        return longArray[percentilePosition];
+        return responseTimeList.get(percentilePosition);
     }
     
     private static void fileOutput() throws IOException {
