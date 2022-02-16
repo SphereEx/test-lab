@@ -18,6 +18,10 @@ public class SysbenchConstant {
 
     public static String distributionTransaction;
     
+    public static int mergeSortFrom;
+    
+    public static int mergeSortTo;
+    
     public static void initConstants() {
         configFilePath = System.getProperty("conf");
         time = Integer.parseInt(System.getProperty("time"));
@@ -30,6 +34,12 @@ public class SysbenchConstant {
             percentile = 99;
         } else {
             percentile = Integer.parseInt(System.getProperty("percentile"));
+        }
+        if (null != System.getProperty("merge-sort-from")) {
+            mergeSortFrom = Integer.parseInt("merge-sort-from");
+        }
+        if (null != System.getProperty("merge-sort-to")) {
+            mergeSortTo = Integer.parseInt("merge-sort-to");
         }
     }
 }
