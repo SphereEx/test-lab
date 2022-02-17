@@ -7,6 +7,7 @@ import com.github.taojintianxia.cornucopia.jdbctest.cases.PointSelect;
 import com.github.taojintianxia.cornucopia.jdbctest.cases.PointSelectOrderBy;
 import com.github.taojintianxia.cornucopia.jdbctest.cases.ReadOnly;
 import com.github.taojintianxia.cornucopia.jdbctest.cases.ReadWrite;
+import com.github.taojintianxia.cornucopia.jdbctest.cases.SelectMergeSort;
 import com.github.taojintianxia.cornucopia.jdbctest.cases.SysbenchBenchmark;
 import com.github.taojintianxia.cornucopia.jdbctest.cases.WriteOnly;
 
@@ -39,6 +40,9 @@ public class BenchmarkFactory {
         }
         if ("oltp_delete".equals(benchmarkName)) {
             return new Deletes(connection);
+        }
+        if ("oltp_select_merge_sort".equals(benchmarkName)) {
+            return new SelectMergeSort(connection);
         }
 
         throw new UnsupportedOperationException("not support your benchmark");
