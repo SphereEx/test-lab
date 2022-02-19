@@ -26,3 +26,9 @@ mvn clean install
 ```shell
 java -Dconf=/opt/test/sharding-databases-tables.yaml -Dtime=10 -Dthread=2 -Dscript=oltp_read_write -Dtable-size=1000 -Dtables=10 -Dpercentile=99 -jar jdbc-pressure-test-1.0.0-SNAPSHOT.jar 
 ```
+
+if test merge sort, like followings :
+```shell
+java -Dconf=/opt/test/sharding-databases-tables.yaml -Dtime=10 -Dthread=2 -Dscript=oltp_read_write -Dtable-size=1000 -Dtables=10 -Dpercentile=99 -Dmerge-sort-from=100 -Dmerge-sort-to=200 -jar jdbc-pressure-test-1.0.0-SNAPSHOT.jar 
+
+```
