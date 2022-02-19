@@ -6,7 +6,7 @@ public class SysbenchConstant {
     
     public static String jdbcUrl= "jdbc-url";
     
-    public static String userName = "username";
+    public static String username = "username";
     
     public static String password = "password";
 
@@ -51,10 +51,10 @@ public class SysbenchConstant {
             jdbcUrl = System.getProperty("jdbc-url");
         }
         if (null != System.getProperty("username")) {
-            jdbcUrl = System.getProperty("username");
+            username = System.getProperty("username");
         }
         if (null != System.getProperty("password")) {
-            jdbcUrl = System.getProperty("password");
+            password = System.getProperty("password");
         }
         if (null != System.getProperty("merge-sort-from")) {
             mergeSortFrom = Integer.parseInt("merge-sort-from");

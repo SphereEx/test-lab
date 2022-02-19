@@ -4,6 +4,8 @@ import com.github.taojintianxia.cornucopia.jdbctest.constants.SysbenchConstant;
 import com.github.taojintianxia.cornucopia.jdbctest.executor.BenchmarkExecutor;
 import com.github.taojintianxia.cornucopia.jdbctest.factory.BenchmarkFactory;
 import com.github.taojintianxia.cornucopia.jdbctest.validation.SysbenchParamValidator;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.shardingsphere.driver.api.yaml.YamlShardingSphereDataSourceFactory;
 
 import java.io.BufferedWriter;
@@ -13,7 +15,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -139,8 +140,11 @@ public class ShardingJDBCApplication {
     private static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
         Connection connection = null;
         if ("jdbc".equals(SysbenchConstant.jdbcType)) {
-            Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(SysbenchConstant.jdbcUrl, SysbenchConstant.userName, SysbenchConstant.password);
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(SysbenchConstant.jdbcUrl);
+            config.setUsername(SysbenchConstant.username);
+            config.setPassword(SysbenchConstant.password);
+            connection = new HikariDataSource(config).getConnection();
         } else if ("ss-jdbc".equals(SysbenchConstant.jdbcType)){
             connection = YamlShardingSphereDataSourceFactory.createDataSource(new File(SysbenchConstant.configFilePath)).getConnection();
         }
