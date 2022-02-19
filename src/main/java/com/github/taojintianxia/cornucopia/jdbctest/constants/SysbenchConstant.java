@@ -36,10 +36,10 @@ public class SysbenchConstant {
             percentile = Integer.parseInt(System.getProperty("percentile"));
         }
         if (null != System.getProperty("merge-sort-from")) {
-            mergeSortFrom = Integer.parseInt("merge-sort-from");
+            mergeSortFrom = Integer.parseInt(System.getProperty("merge-sort-from"));
         }
         if (null != System.getProperty("merge-sort-to")) {
-            mergeSortTo = Integer.parseInt("merge-sort-to");
+            mergeSortTo = Integer.parseInt(System.getProperty("merge-sort-to"));
         }
     }
 }
