@@ -1,6 +1,14 @@
 package com.github.taojintianxia.cornucopia.jdbctest.constants;
 
 public class SysbenchConstant {
+    
+    public static String jdbcType = "ss-jdbc";
+    
+    public static String jdbcUrl= "jdbc-url";
+    
+    public static String userName = "username";
+    
+    public static String password = "password";
 
     public static String configFilePath;
 
@@ -23,6 +31,7 @@ public class SysbenchConstant {
     public static int mergeSortTo;
     
     public static void initConstants() {
+        jdbcType = System.getProperty("jdbc-type");
         configFilePath = System.getProperty("conf");
         time = Integer.parseInt(System.getProperty("time"));
         thread = Integer.parseInt(System.getProperty("thread"));
@@ -34,6 +43,18 @@ public class SysbenchConstant {
             percentile = 99;
         } else {
             percentile = Integer.parseInt(System.getProperty("percentile"));
+        }
+        if (null != System.getProperty("jdbc-type")) {
+            jdbcType = System.getProperty("jdbc-type");
+        }
+        if (null != System.getProperty("jdbc-url")) {
+            jdbcUrl = System.getProperty("jdbc-url");
+        }
+        if (null != System.getProperty("username")) {
+            jdbcUrl = System.getProperty("username");
+        }
+        if (null != System.getProperty("password")) {
+            jdbcUrl = System.getProperty("password");
         }
         if (null != System.getProperty("merge-sort-from")) {
             mergeSortFrom = Integer.parseInt("merge-sort-from");

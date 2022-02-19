@@ -6,13 +6,14 @@ import com.github.taojintianxia.cornucopia.jdbctest.factory.BenchmarkFactory;
 import com.github.taojintianxia.cornucopia.jdbctest.validation.SysbenchParamValidator;
 import org.apache.shardingsphere.driver.api.yaml.YamlShardingSphereDataSourceFactory;
 
-import javax.sql.DataSource;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,14 +32,13 @@ public class ShardingJDBCApplication {
     
     private static final long MILLION = 1000 * 1000;
     
-    public static void main( String... args ) throws SQLException, IOException {
+    public static void main( String... args ) throws SQLException, IOException, ClassNotFoundException {
         SysbenchParamValidator.validateSysbenchParam();
         SysbenchConstant.initConstants();
-        DataSource dataSource = YamlShardingSphereDataSourceFactory.createDataSource(new File(SysbenchConstant.configFilePath));
         ExecutorService service = Executors.newFixedThreadPool(SysbenchConstant.thread);
         responseTimeLinkedQueue.clear();
         for (int i = 0; i < SysbenchConstant.thread; i++) {
-            BenchmarkExecutor benchmarkExecutor = new BenchmarkExecutor(BenchmarkFactory.getBenchmarkByName(SysbenchConstant.scriptName, dataSource.getConnection()), responseTimeLinkedQueue);
+            BenchmarkExecutor benchmarkExecutor = new BenchmarkExecutor(BenchmarkFactory.getBenchmarkByName(SysbenchConstant.scriptName, getConnection()), responseTimeLinkedQueue);
             service.submit(benchmarkExecutor);
         }
         Timer timer = new Timer();
@@ -134,5 +134,16 @@ public class ShardingJDBCApplication {
         bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList)).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
         bufferedWriter.flush();
         bufferedWriter.close();
+    }
+    
+    private static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
+        Connection connection = null;
+        if ("jdbc".equals(SysbenchConstant.jdbcType)) {
+            Class.forName("com.mysql.jdbc.Driver");
+            connection = DriverManager.getConnection(SysbenchConstant.jdbcUrl, SysbenchConstant.userName, SysbenchConstant.password);
+        } else if ("ss-jdbc".equals(SysbenchConstant.jdbcType)){
+            connection = YamlShardingSphereDataSourceFactory.createDataSource(new File(SysbenchConstant.configFilePath)).getConnection();
+        }
+        return connection;
     }
 }
