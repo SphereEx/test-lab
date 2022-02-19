@@ -127,12 +127,11 @@ public class ShardingJDBCApplication {
     private static void fileOutput(List<Long> responseTimeList) throws IOException {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(prefix+System.currentTimeMillis()+".log"));
         bufferedWriter.write("Total execution count : " + responseTimeList.size()+"\n");
-        bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAverageTime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Min time is :"  + BigDecimal.valueOf(getMinTime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAverageTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Min time is :"  + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
         bufferedWriter.write("TPS is : " + responseTimeList.size() / SysbenchConstant.time+"\n");
-        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList)).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
         bufferedWriter.flush();
         bufferedWriter.close();
     }
