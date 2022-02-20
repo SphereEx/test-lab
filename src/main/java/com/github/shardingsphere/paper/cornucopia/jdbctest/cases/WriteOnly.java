@@ -1,6 +1,6 @@
-package com.github.taojintianxia.cornucopia.jdbctest.cases;
+package com.github.shardingsphere.paper.cornucopia.jdbctest.cases;
 
-import com.github.taojintianxia.cornucopia.jdbctest.constants.SysbenchConstant;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.SysbenchConstant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

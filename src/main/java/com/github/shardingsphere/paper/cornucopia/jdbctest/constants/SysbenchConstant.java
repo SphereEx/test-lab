@@ -1,4 +1,4 @@
-package com.github.taojintianxia.cornucopia.jdbctest.constants;
+package com.github.shardingsphere.paper.cornucopia.jdbctest.constants;
 
 public class SysbenchConstant {
     

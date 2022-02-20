@@ -1,4 +1,4 @@
-package com.github.taojintianxia.cornucopia.jdbctest.cases;
+package com.github.shardingsphere.paper.cornucopia.jdbctest.cases;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

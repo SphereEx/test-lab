@@ -1,4 +1,4 @@
-package com.github.taojintianxia.cornucopia.jdbctest.validation;
+package com.github.shardingsphere.paper.cornucopia.jdbctest.validation;
 
 import com.google.common.base.Strings;
 
