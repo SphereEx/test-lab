@@ -4,15 +4,17 @@ import com.github.taojintianxia.cornucopia.jdbctest.constants.SysbenchConstant;
 import com.github.taojintianxia.cornucopia.jdbctest.executor.BenchmarkExecutor;
 import com.github.taojintianxia.cornucopia.jdbctest.factory.BenchmarkFactory;
 import com.github.taojintianxia.cornucopia.jdbctest.validation.SysbenchParamValidator;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.apache.shardingsphere.driver.api.yaml.YamlShardingSphereDataSourceFactory;
 
-import javax.sql.DataSource;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,14 +33,13 @@ public class ShardingJDBCApplication {
     
     private static final long MILLION = 1000 * 1000;
     
-    public static void main( String... args ) throws SQLException, IOException {
+    public static void main( String... args ) throws SQLException, IOException, ClassNotFoundException {
         SysbenchParamValidator.validateSysbenchParam();
         SysbenchConstant.initConstants();
-        DataSource dataSource = YamlShardingSphereDataSourceFactory.createDataSource(new File(SysbenchConstant.configFilePath));
         ExecutorService service = Executors.newFixedThreadPool(SysbenchConstant.thread);
         responseTimeLinkedQueue.clear();
         for (int i = 0; i < SysbenchConstant.thread; i++) {
-            BenchmarkExecutor benchmarkExecutor = new BenchmarkExecutor(BenchmarkFactory.getBenchmarkByName(SysbenchConstant.scriptName, dataSource.getConnection()), responseTimeLinkedQueue);
+            BenchmarkExecutor benchmarkExecutor = new BenchmarkExecutor(BenchmarkFactory.getBenchmarkByName(SysbenchConstant.scriptName, getConnection()), responseTimeLinkedQueue);
             service.submit(benchmarkExecutor);
         }
         Timer timer = new Timer();
@@ -126,13 +127,26 @@ public class ShardingJDBCApplication {
     private static void fileOutput(List<Long> responseTimeList) throws IOException {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(prefix+System.currentTimeMillis()+".log"));
         bufferedWriter.write("Total execution count : " + responseTimeList.size()+"\n");
-        bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAverageTime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Min time is :"  + BigDecimal.valueOf(getMinTime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime()).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAverageTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Min time is :"  + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
         bufferedWriter.write("TPS is : " + responseTimeList.size() / SysbenchConstant.time+"\n");
-        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList)).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
         bufferedWriter.flush();
         bufferedWriter.close();
+    }
+    
+    private static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
+        Connection connection = null;
+        if ("jdbc".equals(SysbenchConstant.jdbcType)) {
+            HikariConfig config = new HikariConfig();
+            config.setJdbcUrl(SysbenchConstant.jdbcUrl);
+            config.setUsername(SysbenchConstant.username);
+            config.setPassword(SysbenchConstant.password);
+            connection = new HikariDataSource(config).getConnection();
+        } else if ("ss-jdbc".equals(SysbenchConstant.jdbcType)){
+            connection = YamlShardingSphereDataSourceFactory.createDataSource(new File(SysbenchConstant.configFilePath)).getConnection();
+        }
+        return connection;
     }
 }
