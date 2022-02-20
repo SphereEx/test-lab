@@ -47,6 +47,9 @@ public class SysbenchConstant {
         if (null != System.getProperty("jdbc-type")) {
             jdbcType = System.getProperty("jdbc-type");
         }
+        if (null == System.getProperty("jdbc-type")) {
+            jdbcType = "ss-jdbc";
+        }
         if (null != System.getProperty("jdbc-url")) {
             jdbcUrl = System.getProperty("jdbc-url");
         }
