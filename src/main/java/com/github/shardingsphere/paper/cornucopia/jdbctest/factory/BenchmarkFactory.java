@@ -1,16 +1,16 @@
-package com.github.taojintianxia.cornucopia.jdbctest.factory;
+package com.github.shardingsphere.paper.cornucopia.jdbctest.factory;
 
-import com.github.taojintianxia.cornucopia.jdbctest.cases.Deletes;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.IndexUpdates;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.NonIndexUpdates;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.PointSelect;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.PointSelectOrderBy;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.ReadOnly;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.ReadWrite;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.SelectMergeSort;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.SysbenchBenchmark;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.WriteOnly;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.BindingSelect;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.Deletes;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.IndexUpdates;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.NonIndexUpdates;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.PointSelect;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.PointSelectOrderBy;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.ReadOnly;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.ReadWrite;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.SelectMergeSort;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.SysbenchBenchmark;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.WriteOnly;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.BindingSelect;
 
 import java.sql.Connection;
 import java.sql.SQLException;

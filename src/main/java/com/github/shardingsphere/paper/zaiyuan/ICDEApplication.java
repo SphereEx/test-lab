@@ -1,4 +1,4 @@
-package com.github.taojintianxia.zaiyuan;
+package com.github.shardingsphere.paper.zaiyuan;
 
 import org.apache.shardingsphere.driver.api.yaml.YamlShardingSphereDataSourceFactory;
 

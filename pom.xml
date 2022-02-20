@@ -149,7 +149,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.github.taojintianxia.cornucopia.jdbctest.ShardingJDBCApplication</mainClass>
+                            <mainClass>com.github.shardingsphere.paper.cornucopia.jdbctest.ShardingJDBCApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
