@@ -1,14 +1,6 @@
 package com.github.taojintianxia.cornucopia.jdbctest.factory;
 
-import com.github.taojintianxia.cornucopia.jdbctest.cases.Deletes;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.IndexUpdates;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.NonIndexUpdates;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.PointSelect;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.PointSelectOrderBy;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.ReadOnly;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.ReadWrite;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.SysbenchBenchmark;
-import com.github.taojintianxia.cornucopia.jdbctest.cases.WriteOnly;
+import com.github.taojintianxia.cornucopia.jdbctest.cases.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -39,6 +31,9 @@ public class BenchmarkFactory {
         }
         if ("oltp_delete".equals(benchmarkName)) {
             return new Deletes(connection);
+        }
+        if ("binding_select".equals(benchmarkName)) {
+            return new BindingSelect(connection);
         }
 
         throw new UnsupportedOperationException("not support your benchmark");
