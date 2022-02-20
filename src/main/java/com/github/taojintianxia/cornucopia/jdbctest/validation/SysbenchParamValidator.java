@@ -5,9 +5,6 @@ import com.google.common.base.Strings;
 public class SysbenchParamValidator {
 
     public static void validateSysbenchParam() {
-        if (Strings.isNullOrEmpty(System.getProperty("conf"))) {
-            throw new RuntimeException("\"-Dconf\" has not been set");
-        }
         if (Strings.isNullOrEmpty(System.getProperty("time"))) {
             throw new RuntimeException("\"-Dtime\" has not been set");
         }
