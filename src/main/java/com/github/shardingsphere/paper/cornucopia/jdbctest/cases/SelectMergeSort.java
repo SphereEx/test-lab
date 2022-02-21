@@ -29,15 +29,19 @@ public class SelectMergeSort implements SysbenchBenchmark{
         selectDistinctCOrderStatements = new PreparedStatement[SysbenchConstant.tables];
         for (int i = 0; i < SysbenchConstant.tables; i++) {
             selectCStatements[i] = connection.prepareStatement("SELECT c FROM sbtest" +(i+1)+" WHERE id BETWEEN ? AND ?");
+            selectCStatements[i].setFetchSize(Integer.MIN_VALUE);
         }
         for (int i = 0; i < SysbenchConstant.tables; i++) {
             selectSumStatements[i] = connection.prepareStatement("SELECT SUM(k) FROM sbtest" +(i+1)+" WHERE id BETWEEN ? AND ?");
+            selectSumStatements[i].setFetchSize(Integer.MIN_VALUE);
         }
         for (int i = 0; i < SysbenchConstant.tables; i++) {
             selectCOrderStatements[i] = connection.prepareStatement("SELECT c FROM sbtest" +(i+1)+" WHERE id BETWEEN ? AND ? order by c");
+            selectCOrderStatements[i].setFetchSize(Integer.MIN_VALUE);
         }
         for (int i = 0; i < SysbenchConstant.tables; i++) {
             selectDistinctCOrderStatements[i] = connection.prepareStatement("SELECT DISTINCT c FROM sbtest" +(i+1)+" WHERE id BETWEEN ? AND ? order by c");
+            selectDistinctCOrderStatements[i].setFetchSize(Integer.MIN_VALUE);
         }
     }
     
