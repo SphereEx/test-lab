@@ -47,20 +47,28 @@ public class SelectMergeSort implements SysbenchBenchmark{
     
     @Override
     public void execute() throws SQLException {
-        int i = random.nextInt(SysbenchConstant.tables);
-        connection.setAutoCommit(false);
-        selectCStatements[i].setInt(1,SysbenchConstant.mergeSortFrom);
-        selectCStatements[i].setInt(2,SysbenchConstant.mergeSortTo);
-        selectCStatements[i].execute();
-        selectSumStatements[i].setInt(1,SysbenchConstant.mergeSortFrom);
-        selectSumStatements[i].setInt(2,SysbenchConstant.mergeSortTo);
-        selectSumStatements[i].execute();
-        selectCOrderStatements[i].setInt(1,SysbenchConstant.mergeSortFrom);
-        selectCOrderStatements[i].setInt(2,SysbenchConstant.mergeSortTo);
-        selectCOrderStatements[i].execute();
-        selectDistinctCOrderStatements[i].setInt(1,SysbenchConstant.mergeSortFrom);
-        selectDistinctCOrderStatements[i].setInt(2,SysbenchConstant.mergeSortTo);
-        selectDistinctCOrderStatements[i].execute();
-        connection.commit();
+        int tableIndex = random.nextInt(SysbenchConstant.tables);
+        if (SysbenchConstant.useTransaction) {
+            connection.setAutoCommit(false);
+            execute0(tableIndex);
+            connection.commit();
+        } else {
+            execute0(tableIndex);
+        }
+    }
+    
+    private void execute0(final int tableIndex) throws SQLException {
+        selectCStatements[tableIndex].setInt(1,SysbenchConstant.mergeSortFrom);
+        selectCStatements[tableIndex].setInt(2,SysbenchConstant.mergeSortTo);
+        selectCStatements[tableIndex].execute();
+        selectSumStatements[tableIndex].setInt(1,SysbenchConstant.mergeSortFrom);
+        selectSumStatements[tableIndex].setInt(2,SysbenchConstant.mergeSortTo);
+        selectSumStatements[tableIndex].execute();
+        selectCOrderStatements[tableIndex].setInt(1,SysbenchConstant.mergeSortFrom);
+        selectCOrderStatements[tableIndex].setInt(2,SysbenchConstant.mergeSortTo);
+        selectCOrderStatements[tableIndex].execute();
+        selectDistinctCOrderStatements[tableIndex].setInt(1,SysbenchConstant.mergeSortFrom);
+        selectDistinctCOrderStatements[tableIndex].setInt(2,SysbenchConstant.mergeSortTo);
+        selectDistinctCOrderStatements[tableIndex].execute();
     }
 }

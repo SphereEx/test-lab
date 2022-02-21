@@ -30,6 +30,8 @@ public class SysbenchConstant {
     
     public static int mergeSortTo;
     
+    public static boolean useTransaction;
+    
     public static void initConstants() {
         jdbcType = System.getProperty("jdbc-type");
         configFilePath = System.getProperty("conf");
@@ -64,6 +66,9 @@ public class SysbenchConstant {
         }
         if (null != System.getProperty("merge-sort-to")) {
             mergeSortTo = Integer.parseInt(System.getProperty("merge-sort-to"));
+        }
+        if (null != System.getProperty("use-transaction")) {
+            useTransaction = Boolean.parseBoolean(System.getProperty("use-transaction"));
         }
     }
 }
