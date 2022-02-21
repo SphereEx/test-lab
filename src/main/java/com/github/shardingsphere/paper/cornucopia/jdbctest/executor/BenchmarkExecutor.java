@@ -1,6 +1,6 @@
-package com.github.taojintianxia.cornucopia.jdbctest.executor;
+package com.github.shardingsphere.paper.cornucopia.jdbctest.executor;
 
-import com.github.taojintianxia.cornucopia.jdbctest.cases.SysbenchBenchmark;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.SysbenchBenchmark;
 import lombok.RequiredArgsConstructor;
 
 import java.util.concurrent.ConcurrentLinkedQueue;

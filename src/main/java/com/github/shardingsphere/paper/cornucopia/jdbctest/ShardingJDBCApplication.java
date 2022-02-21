@@ -1,9 +1,9 @@
-package com.github.taojintianxia.cornucopia.jdbctest;
+package com.github.shardingsphere.paper.cornucopia.jdbctest;
 
-import com.github.taojintianxia.cornucopia.jdbctest.constants.SysbenchConstant;
-import com.github.taojintianxia.cornucopia.jdbctest.executor.BenchmarkExecutor;
-import com.github.taojintianxia.cornucopia.jdbctest.factory.BenchmarkFactory;
-import com.github.taojintianxia.cornucopia.jdbctest.validation.SysbenchParamValidator;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.SysbenchConstant;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.executor.BenchmarkExecutor;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.factory.BenchmarkFactory;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.validation.SysbenchParamValidator;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.shardingsphere.driver.api.yaml.YamlShardingSphereDataSourceFactory;
