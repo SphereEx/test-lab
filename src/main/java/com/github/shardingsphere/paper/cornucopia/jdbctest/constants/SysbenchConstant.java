@@ -4,6 +4,8 @@ public class SysbenchConstant {
     
     public static String jdbcType = "ss-jdbc";
     
+    public static String dbType = "db-type";
+    
     public static String jdbcUrl= "jdbc-url";
     
     public static String username = "username";
@@ -70,5 +72,10 @@ public class SysbenchConstant {
         if (null != System.getProperty("use-transaction")) {
             useTransaction = Boolean.parseBoolean(System.getProperty("use-transaction"));
         }
+        if (null != System.getProperty("db-type")) {
+            dbType = System.getProperty("db-type");
+        } else {
+            dbType = "mysql";
+        } 
     }
 }
