@@ -11,6 +11,7 @@ public class BenchmarkExecutor implements Runnable {
     private final SysbenchBenchmark sysbenchBenchmark;
 
     private final ConcurrentLinkedQueue<Long> queue;
+    private final ConcurrentLinkedQueue<Long> errorResponseTimeQueue;
 
     @Override
     public void run() {
@@ -18,10 +19,11 @@ public class BenchmarkExecutor implements Runnable {
             long start = System.nanoTime();
             try {
                 sysbenchBenchmark.execute();
-            }catch (Exception e){
-                e.printStackTrace();
+                queue.add(System.nanoTime() - start);
+            } catch (Exception e) {
+                // System.err.println("Execute Error: " + e.getMessage());
+                errorResponseTimeQueue.add(System.nanoTime() - start);
             }
-            queue.add(System.nanoTime() - start);
         }
     }
 }
