@@ -28,18 +28,20 @@ import java.util.concurrent.Executors;
 public class ShardingJDBCApplication {
 
     private static final ConcurrentLinkedQueue<Long> responseTimeLinkedQueue = new ConcurrentLinkedQueue<>();
-    
+    private static final ConcurrentLinkedQueue<Long> errorResponseTimeQueue = new ConcurrentLinkedQueue<>();
+
     private static final String prefix = "ShardingSphere-JDBC-";
-    
+
     private static final long MILLION = 1000 * 1000;
-    
-    public static void main( String... args ) throws SQLException, IOException, ClassNotFoundException {
+
+    public static void main(String... args) throws SQLException, IOException, ClassNotFoundException {
         SysbenchParamValidator.validateSysbenchParam();
         SysbenchConstant.initConstants();
         ExecutorService service = Executors.newFixedThreadPool(SysbenchConstant.thread);
         responseTimeLinkedQueue.clear();
         for (int i = 0; i < SysbenchConstant.thread; i++) {
-            BenchmarkExecutor benchmarkExecutor = new BenchmarkExecutor(BenchmarkFactory.getBenchmarkByName(SysbenchConstant.scriptName, getConnection()), responseTimeLinkedQueue);
+            BenchmarkExecutor benchmarkExecutor = new BenchmarkExecutor(
+                    BenchmarkFactory.getBenchmarkByName(SysbenchConstant.scriptName, getConnection()), responseTimeLinkedQueue, errorResponseTimeQueue);
             service.submit(benchmarkExecutor);
         }
         Timer timer = new Timer();
@@ -52,7 +54,7 @@ public class ShardingJDBCApplication {
 
         private ExecutorService executorService;
 
-        public void setExecutorService( ExecutorService executorService ) {
+        public void setExecutorService(ExecutorService executorService) {
             this.executorService = executorService;
         }
 
@@ -63,7 +65,7 @@ public class ShardingJDBCApplication {
             System.out.println("----------------------------------------------------------");
             try {
                 executorService.shutdownNow();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             analyze();
@@ -75,27 +77,36 @@ public class ShardingJDBCApplication {
         List<Long> responseTimeList = new ArrayList<>(responseTimeLinkedQueue.size());
         responseTimeList.addAll(responseTimeLinkedQueue);
         Collections.sort(responseTimeList);
-        System.out.println("Average time is : " + BigDecimal.valueOf(getAverageTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("Average time is : " + BigDecimal.valueOf(getAvgTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("TPS is : " + responseTimeLinkedQueue.size() / SysbenchConstant.time);
         System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
+        System.out.printf("Error Count: %s, Error Avg Time: %s\n", errorResponseTimeQueue.size(), BigDecimal.valueOf(getErrorAvgTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         try {
             fileOutput(responseTimeList);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("got an error when writing log : ");
             e.printStackTrace();
         }
     }
 
-    private static double getAverageTime() {
+    private static double getErrorAvgTime() {
+        return getAverageTime(errorResponseTimeQueue);
+    }
+
+    private static double getAvgTime() {
+        return getAverageTime(ShardingJDBCApplication.responseTimeLinkedQueue);
+    }
+
+    private static double getAverageTime(ConcurrentLinkedQueue<Long> queue) {
         long timeTotal = 0;
-        for (long each : ShardingJDBCApplication.responseTimeLinkedQueue) {
+        for (long each : queue) {
             timeTotal += each;
         }
-        return timeTotal * 1.0 / ShardingJDBCApplication.responseTimeLinkedQueue.size();
+        return timeTotal * 1.0 / queue.size();
     }
-    
+
     private static double getMaxime() {
         double maxTime = 0;
         for (long each : ShardingJDBCApplication.responseTimeLinkedQueue) {
@@ -105,7 +116,7 @@ public class ShardingJDBCApplication {
         }
         return maxTime;
     }
-    
+
     private static double getMinTime() {
         double minTime = Integer.MAX_VALUE;
         for (long each : ShardingJDBCApplication.responseTimeLinkedQueue) {
@@ -115,7 +126,7 @@ public class ShardingJDBCApplication {
         }
         return minTime;
     }
-    
+
     private static double getPercentileTime(List<Long> responseTimeList) {
         int percentilePosition = responseTimeList.size() * SysbenchConstant.percentile / 100;
         if (percentilePosition >= responseTimeList.size()) {
@@ -123,19 +134,19 @@ public class ShardingJDBCApplication {
         }
         return responseTimeList.get(percentilePosition);
     }
-    
+
     private static void fileOutput(List<Long> responseTimeList) throws IOException {
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(prefix+System.currentTimeMillis()+".log"));
-        bufferedWriter.write("Total execution count : " + responseTimeList.size()+"\n");
-        bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAverageTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Min time is :"  + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
-        bufferedWriter.write("TPS is : " + responseTimeList.size() / SysbenchConstant.time+"\n");
-        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue()+"\n");
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(prefix + System.currentTimeMillis() + ".log"));
+        bufferedWriter.write("Total execution count : " + responseTimeList.size() + "\n");
+        bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAvgTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
+        bufferedWriter.write("Min time is :" + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
+        bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
+        bufferedWriter.write("TPS is : " + responseTimeList.size() / SysbenchConstant.time + "\n");
+        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
         bufferedWriter.flush();
         bufferedWriter.close();
     }
-    
+
     private static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
         Connection connection = null;
         if ("jdbc".equals(SysbenchConstant.jdbcType)) {
@@ -144,7 +155,7 @@ public class ShardingJDBCApplication {
             config.setUsername(SysbenchConstant.username);
             config.setPassword(SysbenchConstant.password);
             connection = new HikariDataSource(config).getConnection();
-        } else if ("ss-jdbc".equals(SysbenchConstant.jdbcType)){
+        } else if ("ss-jdbc".equals(SysbenchConstant.jdbcType)) {
             connection = YamlShardingSphereDataSourceFactory.createDataSource(new File(SysbenchConstant.configFilePath)).getConnection();
         }
         return connection;
