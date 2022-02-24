@@ -58,21 +58,22 @@ public class ReadWrite2 implements SysbenchBenchmark {
     @Override
     public void execute() throws SQLException {
         int i = random.nextInt(BenchmarkEnvConstant.tables);
+        int randomId = ThreadLocalRandom.current().nextInt(40000000, 50000000);
         connection.setAutoCommit(false);
         pointSelectStatements[i].setInt(1, 1);
         pointSelectStatements[i].execute();
-        updateIndexStatements[i].setInt(1, 2);
+        updateIndexStatements[i].setInt(1, 1);
         updateIndexStatements[i].execute();
-        updateNonIndexStatements[i].setString(1, String.valueOf(3));
-        updateNonIndexStatements[i].setInt(2, 4);
+        updateNonIndexStatements[i].setString(1, String.valueOf(1));
+        updateNonIndexStatements[i].setInt(2, 1);
         updateNonIndexStatements[i].execute();
-        deleteStatements[i].setInt(1, 5);
-        deleteStatements[i].execute();
-        insertStatements[i].setInt(1, 6);
+        insertStatements[i].setInt(1, randomId);
         insertStatements[i].setInt(2, ThreadLocalRandom.current().nextInt());
         insertStatements[i].setString(3, String.valueOf(7));
         insertStatements[i].setString(4, String.valueOf(8));
         insertStatements[i].execute();
+        deleteStatements[i].setInt(1, randomId);
+        deleteStatements[i].execute();
         connection.commit();
     }
 }
