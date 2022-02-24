@@ -1,6 +1,6 @@
 package com.github.shardingsphere.paper.cornucopia.jdbctest;
 
-import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.SysbenchConstant;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.BenchmarkEnvConstant;
 import com.github.shardingsphere.paper.cornucopia.jdbctest.executor.BenchmarkExecutor;
 import com.github.shardingsphere.paper.cornucopia.jdbctest.factory.BenchmarkFactory;
 import com.github.shardingsphere.paper.cornucopia.jdbctest.validation.SysbenchParamValidator;
@@ -36,18 +36,18 @@ public class ShardingJDBCApplication {
 
     public static void main(String... args) throws SQLException, IOException, ClassNotFoundException {
         SysbenchParamValidator.validateSysbenchParam();
-        SysbenchConstant.initConstants();
-        ExecutorService service = Executors.newFixedThreadPool(SysbenchConstant.thread);
+        BenchmarkEnvConstant.initConstants();
+        ExecutorService service = Executors.newFixedThreadPool(BenchmarkEnvConstant.thread);
         responseTimeLinkedQueue.clear();
-        for (int i = 0; i < SysbenchConstant.thread; i++) {
+        for (int i = 0; i < BenchmarkEnvConstant.thread; i++) {
             BenchmarkExecutor benchmarkExecutor = new BenchmarkExecutor(
-                    BenchmarkFactory.getBenchmarkByName(SysbenchConstant.scriptName, getConnection()), responseTimeLinkedQueue, errorResponseTimeQueue);
+                    BenchmarkFactory.getBenchmarkByName(BenchmarkEnvConstant.scriptName, getConnection()), responseTimeLinkedQueue, errorResponseTimeQueue);
             service.submit(benchmarkExecutor);
         }
         Timer timer = new Timer();
         ThreadPoolTimerTask threadPoolTimerTask = new ThreadPoolTimerTask();
         threadPoolTimerTask.setExecutorService(service);
-        timer.schedule(threadPoolTimerTask, SysbenchConstant.time * 1000L);
+        timer.schedule(threadPoolTimerTask, BenchmarkEnvConstant.time * 1000L);
     }
 
     private static class ThreadPoolTimerTask extends TimerTask {
@@ -80,8 +80,8 @@ public class ShardingJDBCApplication {
         System.out.println("Average time is : " + BigDecimal.valueOf(getAvgTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("Min time is : " + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.println("Max time is : " + BigDecimal.valueOf(getMaxime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
-        System.out.println("TPS is : " + responseTimeLinkedQueue.size() / SysbenchConstant.time);
-        System.out.println(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
+        System.out.println("TPS is : " + responseTimeLinkedQueue.size() / BenchmarkEnvConstant.time);
+        System.out.println(BenchmarkEnvConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         System.out.printf("Error Count: %s, Error Avg Time: %s\n", errorResponseTimeQueue.size(), BigDecimal.valueOf(getErrorAvgTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue());
         try {
             fileOutput(responseTimeList);
@@ -128,7 +128,7 @@ public class ShardingJDBCApplication {
     }
 
     private static double getPercentileTime(List<Long> responseTimeList) {
-        int percentilePosition = responseTimeList.size() * SysbenchConstant.percentile / 100;
+        int percentilePosition = responseTimeList.size() * BenchmarkEnvConstant.percentile / 100;
         if (percentilePosition >= responseTimeList.size()) {
             percentilePosition = responseTimeList.size() - 1;
         }
@@ -141,22 +141,22 @@ public class ShardingJDBCApplication {
         bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAvgTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
         bufferedWriter.write("Min time is :" + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
         bufferedWriter.write("Max time is : " + BigDecimal.valueOf(getMaxime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
-        bufferedWriter.write("TPS is : " + responseTimeList.size() / SysbenchConstant.time + "\n");
-        bufferedWriter.write(SysbenchConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
+        bufferedWriter.write("TPS is : " + responseTimeList.size() / BenchmarkEnvConstant.time + "\n");
+        bufferedWriter.write(BenchmarkEnvConstant.percentile + " percentile is : " + BigDecimal.valueOf(getPercentileTime(responseTimeList) / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
         bufferedWriter.flush();
         bufferedWriter.close();
     }
 
     private static Connection getConnection() throws SQLException, IOException, ClassNotFoundException {
         Connection connection = null;
-        if ("jdbc".equals(SysbenchConstant.jdbcType)) {
+        if ("jdbc".equals(BenchmarkEnvConstant.jdbcType)) {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl(SysbenchConstant.jdbcUrl);
-            config.setUsername(SysbenchConstant.username);
-            config.setPassword(SysbenchConstant.password);
+            config.setJdbcUrl(BenchmarkEnvConstant.jdbcUrl);
+            config.setUsername(BenchmarkEnvConstant.username);
+            config.setPassword(BenchmarkEnvConstant.password);
             connection = new HikariDataSource(config).getConnection();
-        } else if ("ss-jdbc".equals(SysbenchConstant.jdbcType)) {
-            connection = YamlShardingSphereDataSourceFactory.createDataSource(new File(SysbenchConstant.configFilePath)).getConnection();
+        } else if ("ss-jdbc".equals(BenchmarkEnvConstant.jdbcType)) {
+            connection = YamlShardingSphereDataSourceFactory.createDataSource(new File(BenchmarkEnvConstant.configFilePath)).getConnection();
         }
         return connection;
     }

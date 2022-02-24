@@ -1,6 +1,6 @@
 package com.github.shardingsphere.paper.cornucopia.jdbctest.cases;
 
-import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.SysbenchConstant;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.BenchmarkEnvConstant;
 import org.apache.shardingsphere.transaction.core.TransactionType;
 import org.apache.shardingsphere.transaction.core.TransactionTypeHolder;
 
@@ -26,40 +26,40 @@ public class ReadWrite implements SysbenchBenchmark {
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
     
     public ReadWrite( Connection connection) throws SQLException {
-        if ("xa".equalsIgnoreCase(SysbenchConstant.distributionTransaction)){
+        if ("xa".equalsIgnoreCase(BenchmarkEnvConstant.distributionTransaction)){
             TransactionTypeHolder.set(TransactionType.XA);
         }
-        if ("base".equalsIgnoreCase(SysbenchConstant.distributionTransaction)){
+        if ("base".equalsIgnoreCase(BenchmarkEnvConstant.distributionTransaction)){
             TransactionTypeHolder.set(TransactionType.BASE);
         }
         this.connection = connection;
-        pointSelectStatements = new PreparedStatement[SysbenchConstant.tables];
-        updateIndexStatements = new PreparedStatement[SysbenchConstant.tables];
-        updateNonIndexStatements = new PreparedStatement[SysbenchConstant.tables];
-        deleteStatements = new PreparedStatement[SysbenchConstant.tables];
-        insertStatements = new PreparedStatement[SysbenchConstant.tables];
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        pointSelectStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        updateIndexStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        updateNonIndexStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        deleteStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        insertStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             pointSelectStatements[i] = connection.prepareStatement("SELECT c FROM sbtest" +(i+1)+" WHERE id = ?");
         }
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             updateIndexStatements[i] = connection.prepareStatement("UPDATE sbtest" +(i+1)+" SET k=k+1 WHERE id=?");
         }
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             updateNonIndexStatements[i] = connection.prepareStatement("UPDATE sbtest" +(i+1)+" SET c=? WHERE id=?");
         }
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             deleteStatements[i] = connection.prepareStatement("DELETE FROM sbtest" +(i+1)+" WHERE id=?");
         }
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             insertStatements[i] = connection.prepareStatement("INSERT INTO sbtest" +(i+1)+"  (id, k, c, pad) VALUES (?, ?, ?, ?)");
         }
     }
 
     @Override
     public void execute() throws SQLException {
-        int i = random.nextInt(SysbenchConstant.tables);
+        int i = random.nextInt(BenchmarkEnvConstant.tables);
         connection.setAutoCommit(false);
-        int randomId = ThreadLocalRandom.current().nextInt(SysbenchConstant.tableSize);
+        int randomId = ThreadLocalRandom.current().nextInt(BenchmarkEnvConstant.tableSize);
         pointSelectStatements[i].setInt(1, randomId);
         pointSelectStatements[i].execute();
         updateIndexStatements[i].setInt(1, randomId);

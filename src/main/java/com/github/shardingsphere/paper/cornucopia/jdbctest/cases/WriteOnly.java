@@ -1,6 +1,6 @@
 package com.github.shardingsphere.paper.cornucopia.jdbctest.cases;
 
-import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.SysbenchConstant;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.BenchmarkEnvConstant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,29 +23,29 @@ public class WriteOnly implements SysbenchBenchmark {
 
     public WriteOnly(Connection connection ) throws SQLException {
         this.connection = connection;
-        updateIndexStatements = new PreparedStatement[SysbenchConstant.tables];
-        updateNonIndexStatements = new PreparedStatement[SysbenchConstant.tables];
-        deleteStatements = new PreparedStatement[SysbenchConstant.tables];
-        insertStatements = new PreparedStatement[SysbenchConstant.tables];
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        updateIndexStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        updateNonIndexStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        deleteStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        insertStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             updateIndexStatements[i] = connection.prepareStatement("UPDATE sbtest" +(i+1)+" SET k=k+1 WHERE id=?");
         }
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             updateNonIndexStatements[i] = connection.prepareStatement("UPDATE sbtest" +(i+1)+" SET c=? WHERE id=?");
         }
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             deleteStatements[i] = connection.prepareStatement("DELETE FROM sbtest" +(i+1)+" WHERE id=?");
         }
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             insertStatements[i] = connection.prepareStatement("INSERT INTO sbtest" +(i+1)+"  (id, k, c, pad) VALUES (?, ?, ?, ?)");
         }
     }
 
     @Override
     public void execute() throws SQLException {
-        int i = random.nextInt(SysbenchConstant.tables);
+        int i = random.nextInt(BenchmarkEnvConstant.tables);
         connection.setAutoCommit(false);
-        int randomId = ThreadLocalRandom.current().nextInt(SysbenchConstant.tableSize);
+        int randomId = ThreadLocalRandom.current().nextInt(BenchmarkEnvConstant.tableSize);
         updateIndexStatements[i].setInt(1, randomId);
         updateIndexStatements[i].execute();
         updateNonIndexStatements[i].setString(1, String.valueOf(randomId));

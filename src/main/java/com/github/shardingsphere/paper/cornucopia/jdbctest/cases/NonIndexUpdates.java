@@ -1,6 +1,6 @@
 package com.github.shardingsphere.paper.cornucopia.jdbctest.cases;
 
-import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.SysbenchConstant;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.constants.BenchmarkEnvConstant;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,17 +17,17 @@ public class NonIndexUpdates implements SysbenchBenchmark {
 
     public NonIndexUpdates(Connection connection ) throws SQLException {
         this.connection = connection;
-        nonIndexUpdatesStatements = new PreparedStatement[SysbenchConstant.tables];
-        for (int i = 0; i < SysbenchConstant.tables; i++) {
+        nonIndexUpdatesStatements = new PreparedStatement[BenchmarkEnvConstant.tables];
+        for (int i = 0; i < BenchmarkEnvConstant.tables; i++) {
             nonIndexUpdatesStatements[i] = connection.prepareStatement("UPDATE sbtest" +(i+1)+" SET c=? WHERE id=?");
         }
     }
 
     @Override
     public void execute() throws SQLException {
-        int i = random.nextInt(SysbenchConstant.tables);
-        nonIndexUpdatesStatements[i].setString(1, random.nextInt(SysbenchConstant.tableSize)+"");
-        nonIndexUpdatesStatements[i].setInt(2, random.nextInt(SysbenchConstant.tableSize));
+        int i = random.nextInt(BenchmarkEnvConstant.tables);
+        nonIndexUpdatesStatements[i].setString(1, random.nextInt(BenchmarkEnvConstant.tableSize)+"");
+        nonIndexUpdatesStatements[i].setInt(2, random.nextInt(BenchmarkEnvConstant.tableSize));
         nonIndexUpdatesStatements[i].execute();
     }
 }
