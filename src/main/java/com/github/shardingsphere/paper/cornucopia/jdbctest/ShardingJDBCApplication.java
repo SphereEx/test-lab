@@ -66,7 +66,7 @@ public class ShardingJDBCApplication {
             try {
                 executorService.shutdownNow();
             } catch (Exception e) {
-                e.printStackTrace();
+//                e.printStackTrace();
             }
             analyze();
         }

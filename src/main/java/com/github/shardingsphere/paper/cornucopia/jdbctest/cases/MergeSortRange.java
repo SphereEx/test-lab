@@ -19,9 +19,9 @@ public class MergeSortRange implements SysbenchBenchmark{
         this.connection = connection;
         String sql = "SELECT c FROM sbtest1 WHERE ? > 0 AND id BETWEEN 1 AND 100";
         mergeRangeStatement = connection.prepareStatement(sql);
-//        if ("mysql".equalsIgnoreCase(SysbenchConstant.dbType)) {
+//        if ("mysql".equalsIgnoreCase(BenchmarkEnvConstant.dbType)) {
 //            mergeRangeStatement.setFetchSize(Integer.MIN_VALUE);
-//        } else if ("pgsql".equalsIgnoreCase(SysbenchConstant.dbType)){
+//        } else if ("pgsql".equalsIgnoreCase(BenchmarkEnvConstant.dbType)){
 //            mergeRangeStatement.setFetchSize(1);
 //        }
     }
