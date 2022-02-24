@@ -12,6 +12,7 @@ import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.ReadWrite;
 import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.SelectMergeSort;
 import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.SysbenchBenchmark;
 import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.WriteOnly;
+import com.github.shardingsphere.paper.cornucopia.jdbctest.cases.ReadWrite2;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,6 +22,9 @@ public class BenchmarkFactory {
     public static SysbenchBenchmark getBenchmarkByName( String benchmarkName, Connection connection ) throws SQLException {
         if ("oltp_read_write".equals(benchmarkName)) {
             return new ReadWrite(connection);
+        }
+        if ("oltp_read_write2".equals(benchmarkName)) {
+            return new ReadWrite2(connection);
         }
         if ("oltp_read_only".equals(benchmarkName)) {
             return new ReadOnly(connection);
