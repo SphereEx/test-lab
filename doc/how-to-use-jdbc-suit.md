@@ -34,7 +34,7 @@ java -Dconf=/opt/test/sharding-databases-tables.yaml -Dtime=10 -Dthread=2 -Dscri
 
 if test merge sort, like followings :
 ```shell
-java -Dconf=/opt/test/sharding-databases-tables.yaml -Dtime=10 -Dthread=2 -Dscript=oltp_read_write -Dtable-size=1000 -Dtables=10 -Dpercentile=99 -Dmerge-sort-from=100 -Dmerge-sort-to=200 -jar jdbc-pressure-test-1.0.0-SNAPSHOT.jar 
+java -Dconf=/opt/test/sharding-databases-tables.yaml -Dtime=60 -Dthread=1 -Dscript=oltp_merge_sort_range -Dtable-size=10000000 -Dtables=1   -Dpercentile=99 -Dmerge-sort-from=1 -Dmerge-sort-to=100 -jar jdbc-pressure-test-1.0.0-SNAPSHOT.jar
 
 ```
 if test by jdbc, like followings :
