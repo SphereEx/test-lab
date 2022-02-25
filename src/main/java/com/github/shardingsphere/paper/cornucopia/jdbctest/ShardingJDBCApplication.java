@@ -136,7 +136,7 @@ public class ShardingJDBCApplication {
     }
 
     private static void fileOutput(List<Long> responseTimeList) throws IOException {
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(prefix + System.currentTimeMillis() + ".log"));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(prefix + BenchmarkEnvConstant.scriptName + "-" + System.currentTimeMillis() + ".log"));
         bufferedWriter.write("Total execution count : " + responseTimeList.size() + "\n");
         bufferedWriter.write("Average time is : " + BigDecimal.valueOf(getAvgTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
         bufferedWriter.write("Min time is :" + BigDecimal.valueOf(getMinTime() / MILLION).setScale(4, RoundingMode.HALF_UP).doubleValue() + "\n");
