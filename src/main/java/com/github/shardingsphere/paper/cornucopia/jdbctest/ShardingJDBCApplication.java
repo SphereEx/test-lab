@@ -32,7 +32,7 @@ public class ShardingJDBCApplication {
 
     private static final String prefix = "ShardingSphere-JDBC-";
 
-    private static final long MILLION = 1000 * 1000;
+    private static final long MILLION = 1000L * 1000L;
 
     public static void main(String... args) throws SQLException, IOException, ClassNotFoundException {
         SysbenchParamValidator.validateSysbenchParam();
