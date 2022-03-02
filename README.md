@@ -18,7 +18,7 @@ followings are the documents for the script and configuration of these tools
 
 
 ## Optimization
-Linux MultiQueue Networking technology will optimize for the stress test tool, you could enable what by following steps:
+Linux MultiQueue Networking technology will optimize for the stress test tool, you could enable that by following steps:
 1. download the script : 
 ```shell
 wget https://ecs-instance-driver.obs.cn-north-1.myhuaweicloud.com/multi-queue-hw 
@@ -34,5 +34,5 @@ chmod +x multi-queue-hw
 ./multi-queue-hw start
 ```
 
-after the script execute, this will take effort immediately.  
-but remember, this will be disabled after linux system reboot. Please execute this script again after system reboot.
+after the script executes, this will take effect immediately.  
+but remember, this will be disabled after linux system reboot. Please execute this script again after system rebooted.
